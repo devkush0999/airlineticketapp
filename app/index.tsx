@@ -36,7 +36,7 @@ const WelcomeScreen = () => {
             entering={FadeInDown.duration(200).delay(400).springify()}
             className="mt-4"
           >
-            <Text className=" border border-white text-neutral-300 text-lg font-medium leading-[38px] mt-4 px-1">
+            <Text className=" text-neutral-300 text-lg font-medium leading-[38px] mt-4 px-1">
               find an easy way to buy airplane tickets with just a few clicks in
               the application
             </Text>
