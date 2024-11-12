@@ -1,8 +1,13 @@
 import Header from "@/components/Header";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import { ActivityIndicator, Pressable, SafeAreaView } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  SafeAreaView,
+  TextInput,
+} from "react-native";
 import { Image, StyleSheet, Platform, View, Text } from "react-native";
 import {
   ArrowPathRoundedSquareIcon,
@@ -16,6 +21,16 @@ interface searchFlightData {
   seat: number;
   // selectedDate: string;
 }
+
+interface flightOfferData {
+  originLocationCode: string;
+  destinationLocationCode: string;
+  departureDate: Date;
+  returndate: Date;
+  adults: number;
+  maxResults: number;
+}
+
 // ========================================================================== trip option comonents========================================//
 interface TripOptionProps {
   pageNavigation: string;
@@ -161,6 +176,14 @@ export default function HomeScreen() {
     // selectedDate: "2024-03-01",
   });
   const [selectedDate, setSelectedDate] = useState<any>(new Date());
+  const [flightOfferData, setFlightOfferData] = useState<flightOfferData>({
+    originLocationCode: "",
+    destinationLocationCode: "",
+    departureDate: new Date(),
+    returndate: new Date(),
+    adults: 0,
+    maxResults: 20,
+  });
   const handleNavigationChange = (type: string) => {
     setPageNavigation(type);
   };
@@ -191,7 +214,7 @@ export default function HomeScreen() {
             />
           </View>
           {/*========================================================   Location Input ======================================================== */}
-          {/**========================================================  orgin city ========================================================*/}
+          {/**==========================================================  orgin city ========================================================*/}
           <LocationInput
             placeholder={
               searchFlightData.originCity
@@ -229,7 +252,45 @@ export default function HomeScreen() {
           />
 
           {/* ========================================================== Seat Data ======================================================== */}
-          <View className="border-2 border-gray-300 mx-4 rounded-2xl py-3 justify-center flex-row"></View>
+          <View className="border-2 border-gray-300 mx-4 rounded-2xl py-3 justify-center flex-row">
+            <View>
+              <MaterialCommunityIcons
+                size={20}
+                color="gray"
+                name="seat-passenger"
+              />
+            </View>
+            <TextInput
+              className="w-[85%] px-4 font-semibold"
+              placeholder="Seat"
+              keyboardType="numeric"
+              value={String(searchFlightData.seat)}
+              onChangeText={(text) => {
+                const seatValue = parseInt(text, 10);
+
+                const validSeatValue = isNaN(seatValue) ? 0 : seatValue;
+
+                setSearchFlightData((prev) => ({
+                  ...prev,
+                  seat: validSeatValue,
+                }));
+
+                setFlightOfferData((prev) => ({
+                  ...prev,
+                  adults: validSeatValue,
+                }));
+              }}
+            />
+          </View>
+          {/* =========================================================search button =================================================== */}
+          <View className="w-full justify-start pt-2 px-4">
+            <Pressable
+              className="bg-red-200 rounded-lg justify-center items-center py-3"
+              onPress={() => {}}
+            >
+              <Text className="text-bold text-xl text-black">Search </Text>
+            </Pressable>
+          </View>
         </View>
       </View>
     </View>
