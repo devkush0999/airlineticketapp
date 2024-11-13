@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
@@ -204,7 +205,7 @@ export default function HomeScreen() {
       >
         <Header />
       </View>
-      {/* ================================================ ================= Form area ====================================================== ===========*/}
+      {/* ================================================================= Form area ====================================================== ===========*/}
       <View className="w-full px-4 -mt-32 mx-4">
         <View className="bg-white rounded-3xl pt-2 pb-4 shadown-md shadow-slate-500">
           <View className="flex-row justify-between w-full px-4 py-2">
@@ -225,7 +226,7 @@ export default function HomeScreen() {
               <FontAwesome5 size={20} color="gray" name="plane-departure" />
             }
             value={searchFlightData.originCity}
-            onPress={() => {}}
+            onPress={() => router.push("/departure")}
           />
 
           {/* *======================================================== Destination city *======================================================== */}
@@ -283,7 +284,7 @@ export default function HomeScreen() {
             />
           </View>
           {/* =========================================================search button =================================================== */}
-          <View className="w-full justify-start pt-2 px-4">
+          <View className="w-full justify-start pt-2 px-4 mt-4">
             <Pressable
               className="bg-red-200 rounded-lg justify-center items-center py-3"
               onPress={() => {}}
