@@ -82,6 +82,7 @@ export default function departure() {
                   <Text className="text-gray-500 capitalize">
                     {item.name}({item.iatacode})
                   </Text>
+                  <Text>hii</Text>
                 </Pressable>
               )}
             />
