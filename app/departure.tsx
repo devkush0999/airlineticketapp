@@ -14,6 +14,13 @@ export default function departure() {
   const [searchInput, setSearchInput] = useState("");
   const [autoCompleteResults, setAutoCompleteResults] = useState([]);
 
+  const autoCompleteSearch = async (searchInput: string) => {
+    try {
+    } catch (error) {
+      console.error("Error");
+    }
+  };
+
   const handleInputChange = (value: string) => {
     setSearchInput(value);
   };
