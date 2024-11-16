@@ -9,6 +9,8 @@ import {
 import React, { useState } from "react";
 import { router } from "expo-router";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { apiToken } from "./../utils/api";
+import axios from "axios";
 
 export default function departure() {
   const [searchInput, setSearchInput] = useState("");
@@ -16,7 +18,17 @@ export default function departure() {
 
   const autoCompleteSearch = async (searchInput: string) => {
     try {
+      const headers = {
+        Authorization: `Bearer ${apiToken}`,
+      };
+
+      const url = `https://test.api.amadeus.com/v1/reference-data/locations?subType=CITY,AIRPORT&keyword=MUC&countryCode=DE`;
+      const response = await axios.get(url, { headers });
+      setAutoCompleteResults(response.data.data);
     } catch (error) {
+      if (error.response && error.response.status === 429) {
+        console.log("Rate limit exceeded. Please try again later.");
+      }
       console.error("Error");
     }
   };
