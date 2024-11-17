@@ -23,7 +23,7 @@ interface searchFlightData {
   // selectedDate: string;
 }
 
-interface flightOfferData {
+export interface FlightOfferData {
   originLocationCode: string;
   destinationLocationCode: string;
   departureDate: Date;
@@ -177,7 +177,7 @@ export default function HomeScreen() {
     // selectedDate: "2024-03-01",
   });
   const [selectedDate, setSelectedDate] = useState<any>(new Date());
-  const [flightOfferData, setFlightOfferData] = useState<flightOfferData>({
+  const [flightOfferData, setFlightOfferData] = useState<FlightOfferData>({
     originLocationCode: "",
     destinationLocationCode: "",
     departureDate: new Date(),

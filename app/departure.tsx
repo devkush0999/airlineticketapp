@@ -11,10 +11,36 @@ import { router } from "expo-router";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { apiToken } from "./../utils/api";
 import axios from "axios";
+import { FlightOfferData } from "./(tabs)";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function departure() {
   const [searchInput, setSearchInput] = useState("");
   const [autoCompleteResults, setAutoCompleteResults] = useState([]);
+  const [flightOfferData, setFlightOfferData] = useState<any>({
+    originLocationCode: "",
+  });
+  const [previousSelectedDeparture, setPreviousSelectedDeparture] = useState(
+    []
+  );
+
+  const loadPreviousSelectedCities = async () => {
+    try {
+      const cities = await AsyncStorage.getItem("previousSelectedCities");
+      if (cities) {
+        setPreviousSelectedDeparture(JSON.parse(cities));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const debounce = (func: any, delay: number) => {
+    let timeoutId: any;
+    return function (...args: any) {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+  };
 
   const autoCompleteSearch = async (searchInput: string) => {
     try {
@@ -22,19 +48,37 @@ export default function departure() {
         Authorization: `Bearer ${apiToken}`,
       };
 
-      const url = `https://test.api.amadeus.com/v1/reference-data/locations?subType=CITY,AIRPORT&keyword=MUC&countryCode=DE`;
+      const url = `https://test.api.amadeus.com/v1/reference-data/locations?subType=CITY,AIRPORT&keyword=${searchInput}`;
       const response = await axios.get(url, { headers });
       setAutoCompleteResults(response.data.data);
     } catch (error) {
       if (error.response && error.response.status === 429) {
         console.log("Rate limit exceeded. Please try again later.");
       }
-      console.error("Error");
+      console.error(error);
     }
   };
 
+  const debouncedSearch = debounce(autoCompleteSearch, 5000);
+
   const handleInputChange = (value: string) => {
     setSearchInput(value);
+    debouncedSearch(value);
+  };
+  const handleSelectAutoComplete = async (item: any) => {
+    const previousSelectedCities = [...previousSelectedDeparture];
+    previousSelectedCities.push({ city: item.name, iataCode: item.iataCode });
+    await AsyncStorage.setItem(
+      "departureCities",
+      JSON.stringify(previousSelectedCities)
+    );
+    setPreviousSelectedDeparture(previousSelectedCities);
+    setFlightOfferData({
+      ...flightOfferData,
+      originLocationCode: item.iataCode,
+    });
+    setSearchInput(`${item.name} (${item.iataCode})`);
+    setAutoCompleteResults([]);
   };
   return (
     <View className="flex-1 items-center bg-[#F5F7FA]">
@@ -95,13 +139,12 @@ export default function departure() {
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <Pressable
-                  onPress={() => {}}
+                  onPress={() => handleSelectAutoComplete(item)}
                   className="px-2 py-2 rounded-xl my-1"
                 >
                   <Text className="text-gray-500 capitalize">
                     {item.name}({item.iatacode})
                   </Text>
-                  <Text>hii</Text>
                 </Pressable>
               )}
             />
