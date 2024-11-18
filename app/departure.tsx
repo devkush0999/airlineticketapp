@@ -117,7 +117,7 @@ export default function departure() {
           </View>
         </View>
 
-        {/* ===================================== Airport  or city  search ======================================== */}
+        {/* ===================================== Airport  or city  search ======================================= */}
         <View className="w-full py-4 px-4 relative">
           <View className="flex-row justify-between items-center bg-white border-2 border-gray-400 rounded-xl h-14 overflow-hidden">
             <View className="w-full h-full justify-center">
